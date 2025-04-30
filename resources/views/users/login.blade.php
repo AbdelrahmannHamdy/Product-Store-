@@ -28,4 +28,7 @@
     </div>
   </div>
 </div>
+<div>
+    <a href="{{ url('auth/google') }}">Login with Google</a>
+</div>
 @endsection

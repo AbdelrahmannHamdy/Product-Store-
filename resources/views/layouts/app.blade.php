@@ -11,6 +11,9 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
     <!-- Custom CSS -->
     <style>
         body {
@@ -83,18 +86,6 @@
             @yield('content')
         </div>
     </main>
-
-    <footer class="bg-dark text-light py-4 mt-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <p>&copy; {{ date('Y') }}</p>
-                </div>
-            </div>
-        </div>
-    </footer>
 
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

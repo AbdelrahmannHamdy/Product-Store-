@@ -67,6 +67,14 @@
                                                 <button type="submit" class="btn btn-outline-danger ms-2" onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
                                             </form>
                                             @endcan
+                                            @can('hold_products')
+                                                <form action="{{ route('products.hold', $product) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    <button type="submit" class="btn {{ $product->hold ? 'btn-outline-success' : 'btn-outline-warning' }} ms-2">
+                                                        {{ $product->hold ? 'Unhold' : 'Hold' }}
+                                                    </button>
+                                                </form>
+                                            @endcan
                                         </div>
                                     </div>
 

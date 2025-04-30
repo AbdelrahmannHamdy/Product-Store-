@@ -56,7 +56,14 @@ class UsersController extends Controller {
         // Assign customer role by default
         $user->assignRole('customer');
 
-        return redirect('/')->with('success', 'Registration successful! Please log in.');
+        // Log the user in
+        Auth::login($user);
+
+        // Send verification email
+        $user->sendEmailVerificationNotification();
+
+        return redirect()->route('verification.notice')
+            ->with('success', 'Registration successful! Please check your email for verification link.');
     }
 
     public function login(Request $request) {

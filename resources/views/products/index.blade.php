@@ -138,6 +138,15 @@
                                     <button type="submit" class="btn btn-danger" style="min-width: 120px;" onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
                                 </form>
                             @endcan
+
+                            @if(auth()->check() && auth()->user()->can('hold_products'))
+                                <form action="{{ route('products.hold', $product) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm {{ $product->hold ? 'btn-success' : 'btn-warning' }}">
+                                        {{ $product->hold ? 'Unhold' : 'Hold' }}
+                                    </button>
+                                </form>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -156,4 +165,4 @@
         {{ $products->links() }}
     </div>
 </div>
-@endsection 
+@endsection

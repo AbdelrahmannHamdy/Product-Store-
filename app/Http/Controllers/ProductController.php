@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::query();
+        $query = Product::withCount('likes');
 
         // Apply keyword search
         if ($request->filled('keywords')) {
@@ -31,12 +31,17 @@ class ProductController extends Controller
             $query->where('price', '<=', $request->max_price);
         }
 
+        // Filter out held products for customers
+        if (auth()->check() && auth()->user()->hasRole('customer')) {
+            $query->where('hold', false);
+        }
+
         // Apply sorting
-        $sortBy = $request->input('sort_by', 'created_at');
+        $sortBy = $request->input('sort_by', 'likes_count');
         $sortDirection = $request->input('sort_direction', 'desc');
         
         // Validate sort field to prevent SQL injection
-        $allowedSortFields = ['name', 'price', 'created_at'];
+        $allowedSortFields = ['name', 'price', 'created_at', 'likes_count'];
         if (in_array($sortBy, $allowedSortFields)) {
             $query->orderBy($sortBy, $sortDirection);
         }
@@ -157,5 +162,14 @@ class ProductController extends Controller
         } catch (\Exception $e) {
             return back()->withErrors(['error' => 'Failed to delete product. ' . $e->getMessage()]);
         }
+    }
+
+    public function toggleHold(Product $product)
+    {
+        $product->hold = !$product->hold;
+        $product->save();
+
+        $status = $product->hold ? 'held' : 'unheld';
+        return redirect()->back()->with('success', "Product has been {$status}.");
     }
 } 

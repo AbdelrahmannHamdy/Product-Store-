@@ -10,18 +10,7 @@
                     <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" 
                        href="{{ url('/') }}">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('even-numbers') ? 'active' : '' }}" 
-                       href="{{ route('even-numbers') }}">Even Numbers</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('prime-numbers') ? 'active' : '' }}" 
-                       href="{{ route('prime-numbers') }}">Prime Numbers</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('multiplication-table') ? 'active' : '' }}" 
-                       href="{{ route('multiplication-table') }}">Multiplication Table</a>
-                </li>
+
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" 
                        href="{{ route('products.index') }}">Products</a>
@@ -81,11 +70,11 @@
                             </li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
-                                <a class="dropdown-item" href="{{ route('do_logout') }}"
+                                <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                     Logout
                                 </a>
-                                <form id="logout-form" action="{{ route('do_logout') }}" method="POST" class="d-none">
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                                     @csrf
                                 </form>
                             </li>

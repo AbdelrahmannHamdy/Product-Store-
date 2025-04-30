@@ -16,12 +16,14 @@ class Product extends Model
         'stock_quantity',
         'image',
         'code',
-        'model'
+        'model',
+        'hold'
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
-        'stock_quantity' => 'integer'
+        'stock_quantity' => 'integer',
+        'hold' => 'boolean'
     ];
 
     // Add accessor for image URL
@@ -38,6 +40,16 @@ class Product extends Model
         return $this->hasMany(Purchase::class);
     }
 
+    public function likes()
+    {
+        return $this->hasMany(ProductLike::class);
+    }
+
+    public function isLikedBy(User $user)
+    {
+        return $this->likes()->where('user_id', $user->id)->exists();
+    }
+
     public function isInStock()
     {
         return $this->stock_quantity > 0;
@@ -51,4 +63,11 @@ class Product extends Model
         }
         return false;
     }
+
+    public function hasBeenPurchasedBy(User $user)
+    {
+        return $this->purchases()->where('user_id', $user->id)->exists();
+    }
 }
+
+
