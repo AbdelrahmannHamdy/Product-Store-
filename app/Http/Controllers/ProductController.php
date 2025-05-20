@@ -39,7 +39,7 @@ class ProductController extends Controller
         // Apply sorting
         $sortBy = $request->input('sort_by', 'likes_count');
         $sortDirection = $request->input('sort_direction', 'desc');
-        
+
         // Validate sort field to prevent SQL injection
         $allowedSortFields = ['name', 'price', 'created_at', 'likes_count'];
         if (in_array($sortBy, $allowedSortFields)) {
@@ -47,7 +47,7 @@ class ProductController extends Controller
         }
 
         $products = $query->paginate(12)->withQueryString();
-        
+
         return view('products.index', compact('products'));
     }
 
@@ -172,4 +172,39 @@ class ProductController extends Controller
         $status = $product->hold ? 'held' : 'unheld';
         return redirect()->back()->with('success', "Product has been {$status}.");
     }
-} 
+
+    public function favourite(\App\Models\Product $product)
+    {
+        // تحقق أن المستخدم عميل
+        if (!auth()->user()->hasRole('customer')) {
+            abort(403);
+        }
+
+
+        $product->favourite = !$product->favourite;
+        $product->save();
+
+        return back()->with('success', 'Favourite status updated!');
+    }
+
+    public function favourites()
+    {
+        // لو تريد فقط مفضلة المستخدم الحالي (لو عندك جدول علاقات)، الكود يختلف
+        // هنا سنعرض كل المنتجات التي favourite = 1
+        $products = \App\Models\Product::where('favourite', true)->get();
+        return view('products.favourites', compact('products'));
+    }
+
+    public function addReview(Request $request, Product $product)
+    {
+        // Removed permission check so any authenticated user can add a review
+        $request->validate([
+            'review' => 'required|string|min:10|max:1000'
+        ]);
+
+        $product->review = $request->review;
+        $product->save();
+
+        return back()->with('success', 'Review added successfully!');
+    }
+}
