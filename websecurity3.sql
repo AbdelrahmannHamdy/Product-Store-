@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 20, 2025 at 07:16 PM
+-- Generation Time: May 24, 2025 at 11:44 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.4.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `websecurity1`
+-- Database: `websecurity3`
 --
 
 -- --------------------------------------------------------
@@ -38,7 +38,7 @@ CREATE TABLE `cache` (
 --
 
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('spatie.permission.cache', 'a:3:{s:5:\"alias\";a:4:{s:1:\"a\";s:2:\"id\";s:1:\"b\";s:4:\"name\";s:1:\"c\";s:10:\"guard_name\";s:1:\"r\";s:5:\"roles\";}s:11:\"permissions\";a:14:{i:0;a:4:{s:1:\"a\";i:1;s:1:\"b\";s:12:\"manage-users\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:1;a:4:{s:1:\"a\";i:2;s:1:\"b\";s:15:\"manage-products\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:2;a:4:{s:1:\"a\";i:3;s:1:\"b\";s:13:\"manage-orders\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:3;a:4:{s:1:\"a\";i:4;s:1:\"b\";s:14:\"manage-drivers\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:4;a:4:{s:1:\"a\";i:5;s:1:\"b\";s:12:\"view-reports\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:5;a:4:{s:1:\"a\";i:6;s:1:\"b\";s:15:\"manage-settings\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:6;a:4:{s:1:\"a\";i:7;s:1:\"b\";s:20:\"view-assigned-orders\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:7;a:4:{s:1:\"a\";i:8;s:1:\"b\";s:19:\"update-order-status\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:8;a:4:{s:1:\"a\";i:9;s:1:\"b\";s:21:\"view-delivery-history\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:9;a:4:{s:1:\"a\";i:10;s:1:\"b\";s:19:\"update-availability\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:10;a:4:{s:1:\"a\";i:11;s:1:\"b\";s:12:\"place-orders\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:3;}}i:11;a:4:{s:1:\"a\";i:12;s:1:\"b\";s:15:\"view-own-orders\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:3;}}i:12;a:4:{s:1:\"a\";i:13;s:1:\"b\";s:12:\"track-orders\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:3;}}i:13;a:4:{s:1:\"a\";i:14;s:1:\"b\";s:11:\"rate-orders\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:3;}}}s:5:\"roles\";a:3:{i:0;a:3:{s:1:\"a\";i:1;s:1:\"b\";s:5:\"admin\";s:1:\"c\";s:3:\"web\";}i:1;a:3:{s:1:\"a\";i:2;s:1:\"b\";s:6:\"driver\";s:1:\"c\";s:3:\"web\";}i:2;a:3:{s:1:\"a\";i:3;s:1:\"b\";s:8:\"customer\";s:1:\"c\";s:3:\"web\";}}}', 1747846637);
+('spatie.permission.cache', 'a:3:{s:5:\"alias\";a:4:{s:1:\"a\";s:2:\"id\";s:1:\"b\";s:4:\"name\";s:1:\"c\";s:10:\"guard_name\";s:1:\"r\";s:5:\"roles\";}s:11:\"permissions\";a:14:{i:0;a:4:{s:1:\"a\";i:1;s:1:\"b\";s:12:\"manage-users\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:1;a:4:{s:1:\"a\";i:2;s:1:\"b\";s:15:\"manage-products\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:2;a:4:{s:1:\"a\";i:3;s:1:\"b\";s:13:\"manage-orders\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:3;a:4:{s:1:\"a\";i:4;s:1:\"b\";s:14:\"manage-drivers\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:4;a:4:{s:1:\"a\";i:5;s:1:\"b\";s:12:\"view-reports\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:5;a:4:{s:1:\"a\";i:6;s:1:\"b\";s:15:\"manage-settings\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:1:{i:0;i:1;}}i:6;a:4:{s:1:\"a\";i:7;s:1:\"b\";s:20:\"view-assigned-orders\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:7;a:4:{s:1:\"a\";i:8;s:1:\"b\";s:19:\"update-order-status\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:8;a:4:{s:1:\"a\";i:9;s:1:\"b\";s:21:\"view-delivery-history\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:9;a:4:{s:1:\"a\";i:10;s:1:\"b\";s:19:\"update-availability\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:2;}}i:10;a:4:{s:1:\"a\";i:11;s:1:\"b\";s:12:\"place-orders\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:3;}}i:11;a:4:{s:1:\"a\";i:12;s:1:\"b\";s:15:\"view-own-orders\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:3;}}i:12;a:4:{s:1:\"a\";i:13;s:1:\"b\";s:12:\"track-orders\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:3;}}i:13;a:4:{s:1:\"a\";i:14;s:1:\"b\";s:11:\"rate-orders\";s:1:\"c\";s:3:\"web\";s:1:\"r\";a:2:{i:0;i:1;i:1;i:3;}}}s:5:\"roles\";a:3:{i:0;a:3:{s:1:\"a\";i:1;s:1:\"b\";s:5:\"admin\";s:1:\"c\";s:3:\"web\";}i:1;a:3:{s:1:\"a\";i:2;s:1:\"b\";s:6:\"driver\";s:1:\"c\";s:3:\"web\";}i:2;a:3:{s:1:\"a\";i:3;s:1:\"b\";s:8:\"customer\";s:1:\"c\";s:3:\"web\";}}}', 1748088693);
 
 -- --------------------------------------------------------
 
@@ -72,6 +72,21 @@ CREATE TABLE `credit_transactions` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `drivers`
+--
+
+CREATE TABLE `drivers` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `failed_jobs`
 --
 
@@ -93,13 +108,14 @@ CREATE TABLE `failed_jobs` (
 
 CREATE TABLE `hero_sections` (
   `id` bigint(20) UNSIGNED NOT NULL,
-  `heading` varchar(255) NOT NULL,
+  `heading` varchar(255) DEFAULT NULL,
   `subheading` varchar(255) DEFAULT NULL,
   `description` text DEFAULT NULL,
   `button_text` varchar(255) DEFAULT NULL,
   `button_link` varchar(255) DEFAULT NULL,
-  `overlay_opacity` double NOT NULL DEFAULT 0.5,
+  `overlay_opacity` decimal(3,2) NOT NULL DEFAULT 0.40,
   `background_image` varchar(255) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -108,8 +124,8 @@ CREATE TABLE `hero_sections` (
 -- Dumping data for table `hero_sections`
 --
 
-INSERT INTO `hero_sections` (`id`, `heading`, `subheading`, `description`, `button_text`, `button_link`, `overlay_opacity`, `background_image`, `created_at`, `updated_at`) VALUES
-(1, 'dsad', 'dsad', 'dasd', 'dsad', 'dsad', 0.4, 'hero/1747760228_(1).png', '2025-05-20 13:57:08', '2025-05-20 13:57:08');
+INSERT INTO `hero_sections` (`id`, `heading`, `subheading`, `description`, `button_text`, `button_link`, `overlay_opacity`, `background_image`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 'Welcome to Summer', 'Professional Security Solutions', 'Professional security solutions for your peace of mind', 'SHOP NOW', '/products', 0.40, 'hero/1748003788_hero-1.jpg', 1, '2025-05-20 11:30:53', '2025-05-23 14:22:24');
 
 -- --------------------------------------------------------
 
@@ -172,15 +188,15 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (7, '2024_04_06_000002_create_user_credits_table', 1),
 (8, '2024_04_08_000000_create_product_likes_table', 1),
 (9, '2024_04_09_000000_add_hold_column_to_products', 1),
-(10, '2025_04_07_000001_remove_photo_column_from_products', 1),
-(11, '2025_04_07_194403_create_credit_transactions_table', 1),
-(12, '2025_04_07_212505_create_permission_tables', 1),
-(13, '2025_05_15_001504_add_purchase_fields_to_purchases_table', 1),
-(14, '2025_05_15_022221_add_order_status_to_purchases_table', 1),
-(15, '2025_05_18_113838_add_favourite_to_products_table', 1),
-(16, '2025_05_18_120331_add_favourite_to_products_table', 1),
-(17, '2025_05_19_101541_add_review_to_products_table', 1),
-(18, '2025_05_20_165003_create_hero_sections_table', 1);
+(10, '2024_04_10_000000_create_hero_sections_table', 1),
+(11, '2025_04_07_000001_remove_photo_column_from_products', 1),
+(12, '2025_04_07_194403_create_credit_transactions_table', 1),
+(13, '2025_04_07_212505_create_permission_tables', 1),
+(14, '2025_05_15_001504_add_purchase_fields_to_purchases_table', 1),
+(15, '2025_05_15_022221_add_order_status_to_purchases_table', 1),
+(16, '2025_05_18_113838_add_favourite_to_products_table', 1),
+(17, '2025_05_18_120331_add_favourite_to_products_table', 1),
+(18, '2025_05_19_101541_add_review_to_products_table', 1);
 
 -- --------------------------------------------------------
 
@@ -213,7 +229,9 @@ CREATE TABLE `model_has_roles` (
 INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
 (1, 'App\\Models\\User', 1),
 (2, 'App\\Models\\User', 2),
-(3, 'App\\Models\\User', 3);
+(3, 'App\\Models\\User', 3),
+(3, 'App\\Models\\User', 4),
+(3, 'App\\Models\\User', 5);
 
 -- --------------------------------------------------------
 
@@ -263,20 +281,20 @@ CREATE TABLE `permissions` (
 --
 
 INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
-(1, 'manage-users', 'web', '2025-05-20 13:55:38', '2025-05-20 13:55:38'),
-(2, 'manage-products', 'web', '2025-05-20 13:55:38', '2025-05-20 13:55:38'),
-(3, 'manage-orders', 'web', '2025-05-20 13:55:38', '2025-05-20 13:55:38'),
-(4, 'manage-drivers', 'web', '2025-05-20 13:55:38', '2025-05-20 13:55:38'),
-(5, 'view-reports', 'web', '2025-05-20 13:55:38', '2025-05-20 13:55:38'),
-(6, 'manage-settings', 'web', '2025-05-20 13:55:38', '2025-05-20 13:55:38'),
-(7, 'view-assigned-orders', 'web', '2025-05-20 13:55:38', '2025-05-20 13:55:38'),
-(8, 'update-order-status', 'web', '2025-05-20 13:55:38', '2025-05-20 13:55:38'),
-(9, 'view-delivery-history', 'web', '2025-05-20 13:55:38', '2025-05-20 13:55:38'),
-(10, 'update-availability', 'web', '2025-05-20 13:55:38', '2025-05-20 13:55:38'),
-(11, 'place-orders', 'web', '2025-05-20 13:55:38', '2025-05-20 13:55:38'),
-(12, 'view-own-orders', 'web', '2025-05-20 13:55:38', '2025-05-20 13:55:38'),
-(13, 'track-orders', 'web', '2025-05-20 13:55:38', '2025-05-20 13:55:38'),
-(14, 'rate-orders', 'web', '2025-05-20 13:55:38', '2025-05-20 13:55:38');
+(1, 'manage-users', 'web', '2025-05-20 11:30:44', '2025-05-20 11:30:44'),
+(2, 'manage-products', 'web', '2025-05-20 11:30:44', '2025-05-20 11:30:44'),
+(3, 'manage-orders', 'web', '2025-05-20 11:30:44', '2025-05-20 11:30:44'),
+(4, 'manage-drivers', 'web', '2025-05-20 11:30:44', '2025-05-20 11:30:44'),
+(5, 'view-reports', 'web', '2025-05-20 11:30:44', '2025-05-20 11:30:44'),
+(6, 'manage-settings', 'web', '2025-05-20 11:30:44', '2025-05-20 11:30:44'),
+(7, 'view-assigned-orders', 'web', '2025-05-20 11:30:44', '2025-05-20 11:30:44'),
+(8, 'update-order-status', 'web', '2025-05-20 11:30:44', '2025-05-20 11:30:44'),
+(9, 'view-delivery-history', 'web', '2025-05-20 11:30:44', '2025-05-20 11:30:44'),
+(10, 'update-availability', 'web', '2025-05-20 11:30:44', '2025-05-20 11:30:44'),
+(11, 'place-orders', 'web', '2025-05-20 11:30:44', '2025-05-20 11:30:44'),
+(12, 'view-own-orders', 'web', '2025-05-20 11:30:44', '2025-05-20 11:30:44'),
+(13, 'track-orders', 'web', '2025-05-20 11:30:44', '2025-05-20 11:30:44'),
+(14, 'rate-orders', 'web', '2025-05-20 11:30:44', '2025-05-20 11:30:44');
 
 -- --------------------------------------------------------
 
@@ -305,7 +323,12 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `description`, `price`, `stock_quantity`, `image`, `code`, `model`, `created_at`, `updated_at`, `deleted_at`, `hold`, `review`) VALUES
-(1, 'saf', 'sfaf', 231.00, 2344, 'products/1747760254_(1).png', 'fasf', 'fsaf', '2025-05-20 13:57:34', '2025-05-20 13:57:34', NULL, 0, NULL);
+(1, 'Brown Jacket', 'Stylish brown jacket for casual wear', 129.99, 49, 'products/1748003833_product-1.jpg', '1747597847', 'BJ-2023', NULL, '2025-05-23 09:37:13', NULL, 0, NULL),
+(2, 'Black Leather Jacket', 'Classic black leather jacket', 199.99, 33, 'products/1748003847_product-2.jpg', '1747597868', 'LJ-2023', NULL, '2025-05-23 15:14:15', NULL, 0, NULL),
+(3, 'Blue Sneakers', 'Comfortable blue athletic sneakers', 89.99, 75, 'products/1748003856_product-3.jpg', '1747597877', 'BS-2023', NULL, '2025-05-23 09:37:36', NULL, 0, NULL),
+(4, 'Light Brown Coat', 'Lightweight brown coat for spring', 149.99, 40, 'products/1748003865_product-4.jpg', '1747597885', 'LBC-2023', NULL, '2025-05-23 09:37:45', NULL, 0, NULL),
+(5, 'Graphic T-Shirt', 'Printed graphic t-shirt with unique design', 29.99, 100, 'products/1748003874_product-5.jpg', '1747597894', 'GTS-2023', NULL, '2025-05-23 09:37:54', NULL, 0, NULL),
+(6, 'Navy Blue T-Shirt', 'Classic navy blue t-shirt', 24.99, 120, 'products/1748003884_product-6.jpg', '1747597910', 'NBT-2023', NULL, '2025-05-23 09:38:04', NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -320,6 +343,13 @@ CREATE TABLE `product_likes` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `product_likes`
+--
+
+INSERT INTO `product_likes` (`id`, `user_id`, `product_id`, `created_at`, `updated_at`) VALUES
+(1, 3, 1, '2025-05-23 15:56:36', '2025-05-23 15:56:36');
 
 -- --------------------------------------------------------
 
@@ -343,8 +373,18 @@ CREATE TABLE `purchases` (
   `estimated_delivery_time` timestamp NULL DEFAULT NULL,
   `delivered_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `driver_id` bigint(20) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `purchases`
+--
+
+INSERT INTO `purchases` (`id`, `user_id`, `product_id`, `quantity`, `total_price`, `delivery_method`, `delivery_address`, `pickup_branch`, `color`, `payment_method`, `card_last4`, `order_status`, `estimated_delivery_time`, `delivered_at`, `created_at`, `updated_at`, `driver_id`) VALUES
+(1, 3, 1, 1, 129.99, 'home', NULL, NULL, 'default', 'cod', NULL, 'Delivered', NULL, '2025-05-23 12:20:45', '2025-05-20 17:11:34', '2025-05-23 12:20:45', 2),
+(2, 3, 2, 1, 199.99, 'home', NULL, NULL, 'default', 'cod', NULL, 'Pending', NULL, NULL, '2025-05-23 12:23:58', '2025-05-23 12:23:58', NULL),
+(3, 3, 2, 1, 199.99, 'home', NULL, NULL, 'default', 'cod', NULL, 'Pending', NULL, NULL, '2025-05-23 15:14:15', '2025-05-23 15:14:15', NULL);
 
 -- --------------------------------------------------------
 
@@ -365,9 +405,9 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'web', '2025-05-20 13:55:38', '2025-05-20 13:55:38'),
-(2, 'driver', 'web', '2025-05-20 13:55:38', '2025-05-20 13:55:38'),
-(3, 'customer', 'web', '2025-05-20 13:55:38', '2025-05-20 13:55:38');
+(1, 'admin', 'web', '2025-05-20 11:30:44', '2025-05-20 11:30:44'),
+(2, 'driver', 'web', '2025-05-20 11:30:44', '2025-05-20 11:30:44'),
+(3, 'customer', 'web', '2025-05-20 11:30:44', '2025-05-20 11:30:44');
 
 -- --------------------------------------------------------
 
@@ -445,9 +485,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Admin User', 'admin@admin.com', '2025-05-20 13:55:39', '$2y$12$cEhmPVS3o/7SmJnRW8la9eN4Dil16wEsH7/0Za3t5b6cEtk3NZecy', NULL, '2025-05-20 13:55:39', '2025-05-20 13:55:39'),
-(2, 'Driver User', 'driver@driver.com', '2025-05-20 13:55:39', '$2y$12$u7NcWkrqGpSuGSd1OFpACut/CmscMa/j28T0olW/bP/DHAJwuWT5C', NULL, '2025-05-20 13:55:39', '2025-05-20 13:55:39'),
-(3, 'Customer User', 'customer@customer.com', '2025-05-20 13:55:39', '$2y$12$ofZ8VXb495lB.mYvRLHFC.H2H8G1OIo0jzAYc4H.gSDEoPPqlAlxq', NULL, '2025-05-20 13:55:39', '2025-05-20 13:55:39');
+(1, 'Admin User', 'admin@admin.com', '2025-05-20 11:30:49', '$2y$12$DIESIlBI4VQbkpqNOx8HEOCawdwYEw.I10uCsglrGjFBvS40JgtxC', NULL, '2025-05-20 11:30:49', '2025-05-20 11:30:49'),
+(2, 'Driver User', 'driver@driver.com', '2025-05-20 11:30:49', '$2y$12$iM6mDWHfCKlE1j8Weh91ZesXWX5/trX8pPuUzWh4fD04XNlgC1996', NULL, '2025-05-20 11:30:49', '2025-05-20 11:30:49'),
+(3, 'Customer User', 'customer@customer.com', '2025-05-20 11:30:49', '$2y$12$x8IbQDNgCnliuS2/5MgqOORvqTsRG4dAYdRY6CK3ApGyxTJHPBsxC', NULL, '2025-05-20 11:30:49', '2025-05-20 11:30:49'),
+(5, 'Ahmed Abdelmoniem', 'ahmedabdelmonem432@gmail.com', '2025-05-21 17:10:32', '$2y$12$b1MKOeTY862tGhMgiPTp6OSvXk/Eu9Ha4iy6OOPfQdyILJUsFNv7q', NULL, '2025-05-21 16:37:03', '2025-05-21 17:10:32');
 
 -- --------------------------------------------------------
 
@@ -462,6 +503,16 @@ CREATE TABLE `user_credits` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user_credits`
+--
+
+INSERT INTO `user_credits` (`id`, `user_id`, `credit_balance`, `created_at`, `updated_at`) VALUES
+(1, 3, 0.00, '2025-05-20 14:19:02', '2025-05-20 14:19:02'),
+(2, 1, 0.00, '2025-05-20 17:12:14', '2025-05-20 17:12:14'),
+(3, 2, 0.00, '2025-05-20 17:12:14', '2025-05-20 17:12:14'),
+(5, 5, 0.00, '2025-05-21 16:37:07', '2025-05-21 16:37:07');
 
 --
 -- Indexes for dumped tables
@@ -486,6 +537,13 @@ ALTER TABLE `credit_transactions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `credit_transactions_user_id_foreign` (`user_id`),
   ADD KEY `credit_transactions_performed_by_foreign` (`performed_by`);
+
+--
+-- Indexes for table `drivers`
+--
+ALTER TABLE `drivers`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Indexes for table `failed_jobs`
@@ -623,6 +681,12 @@ ALTER TABLE `credit_transactions`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `drivers`
+--
+ALTER TABLE `drivers`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `failed_jobs`
 --
 ALTER TABLE `failed_jobs`
@@ -656,19 +720,19 @@ ALTER TABLE `permissions`
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `product_likes`
 --
 ALTER TABLE `product_likes`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -680,13 +744,13 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `user_credits`
 --
 ALTER TABLE `user_credits`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables

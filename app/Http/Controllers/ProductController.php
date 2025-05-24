@@ -39,7 +39,7 @@ class ProductController extends Controller
         // Apply sorting
         $sortBy = $request->input('sort_by', 'likes_count');
         $sortDirection = $request->input('sort_direction', 'desc');
-
+        
         // Validate sort field to prevent SQL injection
         $allowedSortFields = ['name', 'price', 'created_at', 'likes_count'];
         if (in_array($sortBy, $allowedSortFields)) {
@@ -47,7 +47,7 @@ class ProductController extends Controller
         }
 
         $products = $query->paginate(12)->withQueryString();
-
+        
         return view('products.index', compact('products'));
     }
 
@@ -207,4 +207,4 @@ class ProductController extends Controller
 
         return back()->with('success', 'Review added successfully!');
     }
-}
+} 
