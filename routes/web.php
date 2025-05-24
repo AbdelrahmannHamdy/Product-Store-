@@ -39,6 +39,13 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 
 // Public routes for products and cart
 Route::get('/clothes', [ProductController::class, 'index'])->name('products.index');
+
+// ضع هذا قبل روت show
+Route::middleware(['auth', 'role:admin|manager'])->group(function () {
+    Route::get('/clothes/create', [ProductController::class, 'create'])->name('products.create');
+    // باقي روتات الإدارة
+});
+
 Route::get('/clothes/{product}', [ProductController::class, 'show'])->name('products.show');
 
 // Cart routes (public)
@@ -72,7 +79,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/clothes/dashboard', [ProductController::class, 'index'])->middleware('auth')->name('products.dashboard');
 
     // Employee routes for product management
-    Route::middleware(['can:manage-products'])->group(function () {
+    Route::middleware(['auth', 'role:admin|manager'])->group(function () {
         Route::get('/clothes/create', [ProductController::class, 'create'])->name('products.create');
         Route::post('/clothes', [ProductController::class, 'store'])->name('products.store');
         Route::get('/clothes/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
@@ -217,3 +224,9 @@ Route::get('/test-images', function () {
 });
 
 Role::firstOrCreate(['name' => 'driver']);
+
+$admin = App\Models\User::where('email', 'admin@admin.com')->first();
+$admin->givePermissionTo('manage-products');
+
+$user = App\Models\User::where('email', 'admin@admin.com')->first();
+$user->getRoleNames();
