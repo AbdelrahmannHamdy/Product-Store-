@@ -12,11 +12,6 @@ return new class extends Migration
             // Drop existing image and photo columns if they exist
             $table->dropColumn(['image', 'photo']);
         });
-
-        Schema::table('products', function (Blueprint $table) {
-            // Add fresh image column
-            $table->string('image')->nullable()->after('stock_quantity');
-        });
     }
 
     public function down()
@@ -25,4 +20,4 @@ return new class extends Migration
             $table->dropColumn('image');
         });
     }
-}; 
+};

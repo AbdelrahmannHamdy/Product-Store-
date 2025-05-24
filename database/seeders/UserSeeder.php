@@ -37,4 +37,4 @@ class UserSeeder extends Seeder
         ]);
         $customer->assignRole('customer');
     }
-} 
+}
