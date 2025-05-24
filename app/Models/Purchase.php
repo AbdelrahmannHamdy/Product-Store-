@@ -39,4 +39,9 @@ class Purchase extends Model
     {
         return $this->belongsTo(Product::class);
     }
+
+    public function driver()
+    {
+        return $this->belongsTo(Driver::class);
+    }
 } 

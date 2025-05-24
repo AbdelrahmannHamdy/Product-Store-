@@ -33,7 +33,7 @@ class Product extends Model
         if ($this->image) {
             return asset('storage/' . $this->image);
         }
-        return null;
+        return asset('images/no-image.png');
     }
 
     public function purchases()

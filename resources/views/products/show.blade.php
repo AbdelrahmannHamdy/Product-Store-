@@ -9,11 +9,7 @@
             <div class="card shadow-sm p-4">
                 <div class="row align-items-center">
                     <div class="col-md-5 text-center mb-3 mb-md-0">
-                        @if($product->image)
-                            <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="img-fluid rounded shadow" style="width: 100%; max-width: 320px; height: 220px; object-fit: cover;">
-                        @else
-                            <img src="https://via.placeholder.com/320x220?text=No+Image" alt="No image" class="img-fluid rounded shadow" style="width: 100%; max-width: 320px; height: 220px; object-fit: cover;">
-                        @endif
+                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="img-fluid rounded shadow" style="width: 100%; max-width: 320px; height: 220px; object-fit: cover;">
                     </div>
                     <div class="col-md-7">
                         <h1 class="fw-bold mb-2" style="font-size:2rem;">{{ $product->name }}</h1>

@@ -10,6 +10,10 @@
                     <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" 
                        href="{{ url('/') }}">Home</a>
                 </li>
+                <li class="nav-item">
+  <a class="nav-link" href="{{ route('cryptography') }}">Cryptography</a>
+</li>
+
 
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" 
@@ -59,14 +63,19 @@
                             <i class="fas fa-image"></i> Manage Hero Section
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('employees.*') ? 'active' : '' }}" 
-                           href="{{ route('employees.index') }}">Employees</a>
-                    </li>
+                    
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}" 
                            href="{{ route('admin.orders.index') }}">
                             <i class="fas fa-shopping-cart"></i> Orders
+                        </a>
+                    </li>
+                    @endrole
+
+                    @role('driver')
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('driver.orders.index') ? 'active' : '' }}" href="{{ route('driver.orders.index') }}">
+                            My Orders
                         </a>
                     </li>
                     @endrole

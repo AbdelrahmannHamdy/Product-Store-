@@ -127,4 +127,23 @@ class User extends Authenticatable implements MustVerifyEmail
             }
         });
     }
+
+    // ========== DRIVER RELATIONSHIPS & AVAILABILITY ==========
+    public function currentOrder()
+    {
+        return $this->hasOne(\App\Models\Purchase::class, 'driver_id')
+            ->where('order_status', '!=', 'Delivered')
+            ->latest();
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(\App\Models\Purchase::class, 'driver_id');
+    }
+
+    public function isAvailable()
+    {
+        // متاح لو معندوش أوردر غير مكتمل
+        return !$this->currentOrder()->exists();
+    }
 }

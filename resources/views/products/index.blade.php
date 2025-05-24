@@ -58,11 +58,7 @@
         <div class="col">
             <div class="card h-100 shadow-sm product-card">
                 <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height:220px;overflow:hidden;">
-                    @if($product->image)
-                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="img-fluid rounded" style="object-fit:cover; width:100%; height:100%; min-height:180px;">
-                    @else
-                        <img src="https://via.placeholder.com/300x220?text=No+Image" alt="No image" class="img-fluid rounded" style="object-fit:cover; width:100%; height:100%; min-height:180px;">
-                    @endif
+                    <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="img-fluid rounded" style="object-fit:cover; width:100%; height:100%; min-height:180px;">
                 </div>
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title fw-bold mb-2">{{ $product->name }}</h5>

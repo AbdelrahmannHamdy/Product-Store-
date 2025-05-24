@@ -1,11 +1,12 @@
 <?php
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\UsersController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\UserCreditController;
-use App\Http\Controllers\EmployeeController;
+
 use App\Http\Controllers\ProductLikeController;
 use App\Http\Controllers\GoogleController;
 use Illuminate\Auth\Events\Verified;
@@ -17,6 +18,8 @@ use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HeroSectionController;
 use App\Models\HeroSection;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 Route::get('register', [UsersController::class, 'register'])->name('register');
 Route::post('register', [UsersController::class, 'doRegister'])->name('do_register');
@@ -52,27 +55,28 @@ Route::get('/test', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    // Product routes
-    Route::get('/products', [ProductController::class, 'index'])->middleware('auth')->name('products.index');
+    // Product routes - غيرناها لـ clothes
+    Route::get('/clothes', [ProductController::class, 'index'])->middleware(['auth', 'verified'])->name('products.index');
+    Route::get('/clothes/dashboard', [ProductController::class, 'index'])->middleware('auth')->name('products.dashboard');
 
     // Employee routes for product management
     Route::middleware(['can:manage-products'])->group(function () {
-        Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-        Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-        Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-        Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
-        Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
-        Route::post('/products/{product}/hold', [ProductController::class, 'toggleHold'])
+        Route::get('/clothes/create', [ProductController::class, 'create'])->name('products.create');
+        Route::post('/clothes', [ProductController::class, 'store'])->name('products.store');
+        Route::get('/clothes/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+        Route::put('/clothes/{product}', [ProductController::class, 'update'])->name('products.update');
+        Route::delete('/clothes/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
+        Route::post('/clothes/{product}/hold', [ProductController::class, 'toggleHold'])
             ->name('products.hold')
             ->middleware('can:hold_products');
     });
 
     // This needs to be after the create route
-    Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
+    Route::get('/clothes/{product}', [ProductController::class, 'show'])->name('products.show');
 
     // Purchase routes
     Route::get('/purchases', [PurchaseController::class, 'index'])->name('purchases.index');
-    Route::post('/products/{product}/purchase', [PurchaseController::class, 'store'])->name('purchases.store');
+    Route::post('/clothes/{product}/purchase', [PurchaseController::class, 'store'])->name('purchases.store');
 
     // Credit management routes
     Route::middleware(['can:manage-customer-credits'])->group(function () {
@@ -82,15 +86,15 @@ Route::middleware(['auth'])->group(function () {
 
     // User Management Routes
     Route::get('/users/manage', [UsersController::class, 'manageUsers'])->name('users.manage');
-    Route::post('/users/{user}/manage-credit', [UsersController::class, 'manageCredit'])->name('users.manage-credit');
+    Route::post('/users/{user}/manage-credit', [UserCreditController::class, 'manageCredit'])->name('users.manage-credit');
 
     // Product like routes
-    Route::post('/products/{product}/like', [ProductLikeController::class, 'toggleLike'])
+    Route::post('/clothes/{product}/like', [ProductLikeController::class, 'toggleLike'])
         ->name('products.like')
         ->middleware('auth');
 
     // Product review routes
-    Route::post('/products/{product}/review', [ProductController::class, 'addReview'])
+    Route::post('/clothes/{product}/review', [ProductController::class, 'addReview'])
         ->name('products.review')
         ->middleware('auth');
 
@@ -99,7 +103,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/checkout', [\App\Http\Controllers\CheckoutController::class, 'process'])->name('checkout.process');
 
     // Product favourite routes
-    Route::post('/products/{product}/favourite', [ProductController::class, 'favourite'])->name('products.favourite')->middleware('auth');
+    Route::post('/clothes/{product}/favourite', [ProductController::class, 'favourite'])->name('products.favourite')->middleware('auth');
 });
 
 // Google Authentication Routes
@@ -121,48 +125,6 @@ Route::middleware(['auth'])->group(function () {
         $request->user()->sendEmailVerificationNotification();
         return back()->with('success', 'Verification link sent!');
     })->middleware(['throttle:6,1'])->name('verification.send');
-});
-
-// Protected Routes that require email verification
-Route::middleware(['auth'])->group(function () {
-    // Product routes
-    Route::get('/products', [ProductController::class, 'index'])->middleware('auth')->name('products.index');
-    Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
-
-    // Purchase routes
-    Route::get('/purchases', [PurchaseController::class, 'index'])->name('purchases.index');
-    Route::post('/products/{product}/purchase', [PurchaseController::class, 'store'])->name('purchases.store');
-
-    // Product like routes
-    Route::post('/products/{product}/like', [ProductLikeController::class, 'toggleLike'])
-        ->name('products.like');
-
-    // Employee routes for product management
-    Route::middleware(['can:manage-products'])->group(function () {
-        Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-        Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-        Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-        Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
-        Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
-        Route::post('/products/{product}/hold', [ProductController::class, 'toggleHold'])
-            ->name('products.hold')
-            ->middleware('can:hold_products');
-    });
-
-    // Credit management routes
-    Route::middleware(['can:manage-customer-credits'])->group(function () {
-        Route::get('/users/{user}/credits', [UserCreditController::class, 'show'])->name('credits.show');
-        Route::put('/users/{user}/credits', [UserCreditController::class, 'update'])->name('credits.update');
-    });
-
-    // User Management Routes
-    Route::get('/users/manage', [UsersController::class, 'manageUsers'])->name('users.manage');
-    Route::post('/users/{user}/manage-credit', [UsersController::class, 'manageCredit'])->name('users.manage-credit');
-
-    // Employee Management Routes
-    Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
-        Route::resource('employees', EmployeeController::class);
-    });
 });
 
 Route::post('/cart/buy-now/{product}', [\App\Http\Controllers\CartController::class, 'buyNow'])->name('cart.buyNow');
@@ -194,4 +156,133 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/hero-section', [HeroSectionController::class, 'update'])->name('admin.hero.update');
 });
 
+Route::get('/cryptography', function (Request $request) {
+    $data = $request->data ?? "Welcome to Cryptography";
+    $action = $request->action ?? "Encrypt";
+    $result = "";
+    $status = "Failed";
 
+    if ($action == "Encrypt") {
+        $encrypted = openssl_encrypt($data, 'aes-128-ecb', 'thisisasecretkey', OPENSSL_RAW_DATA);
+        if ($encrypted !== false) {
+            $result = base64_encode($encrypted);
+            $status = "Encrypted Successfully";
+        }
+    } 
+    else if ($action == "Decrypt") {
+        $decoded = base64_decode($data);
+        $decrypted = openssl_decrypt($decoded, 'aes-128-ecb', 'thisisasecretkey', OPENSSL_RAW_DATA);
+        if ($decrypted !== false) {
+            $result = $decrypted;
+            $status = "Decrypted Successfully";
+        }
+    } 
+    else if ($action == "Hash") {
+        // hash() returns a hex string, convert to binary then base64 encode
+        $hashed = hash('sha256', $data, true);
+        $result = base64_encode($hashed);
+        $status = "Hashed Successfully";
+    } 
+    else if ($action == "Sign") {
+        $path = storage_path('app/private/useremail@domain.com.pfx');
+        $password = '12345678';
+        $certificates = [];
+        $pfx = file_get_contents($path);
+        if (openssl_pkcs12_read($pfx, $certificates, $password)) {
+            $privateKey = $certificates['pkey'];
+            $signature = '';
+            if (openssl_sign($data, $signature, $privateKey, OPENSSL_ALGO_SHA256)) {
+                $result = base64_encode($signature);
+                $status = "Signed Successfully";
+            }
+        }
+    } 
+    else if ($action == "Verify") {
+        $signature = base64_decode($request->result ?? '');
+        $path = storage_path('app/public/useremail@domain.com.crt');
+        $publicKey = file_get_contents($path);
+        $pubKeyId = openssl_get_publickey($publicKey);
+        if ($pubKeyId) {
+            $verify = openssl_verify($data, $signature, $pubKeyId, OPENSSL_ALGO_SHA256);
+            if ($verify === 1) {
+                $status = "Verified Successfully";
+            } else if ($verify === 0) {
+                $status = "Verification Failed";
+            } else {
+                $status = "Error during verification";
+            }
+            openssl_free_key($pubKeyId);
+        }
+    } 
+    else if ($action == "KeySend") {
+        $path = storage_path('app/public/useremail@domain.com.crt');
+        $publicKey = file_get_contents($path);
+        if (openssl_public_encrypt($data, $encrypted, $publicKey)) {
+            $result = base64_encode($encrypted);
+            $status = "Key is Encrypted Successfully";
+        }
+    } 
+    else if ($action == "KeyRecive") {
+        $path = storage_path('app/private/useremail@domain.com.pfx');
+        $password = '12345678';
+        $certificates = [];
+        $pfx = file_get_contents($path);
+        if (openssl_pkcs12_read($pfx, $certificates, $password)) {
+            $privateKey = $certificates['pkey'];
+            $encryptedData = base64_decode($data);
+            if (openssl_private_decrypt($encryptedData, $decrypted, $privateKey)) {
+                $result = $decrypted;
+                $status = "Key is Decrypted Successfully";
+            }
+        }
+    }
+
+    return view('cryptography', compact('data', 'result', 'action', 'status'));
+})->name('cryptography');
+
+Route::middleware(['auth', 'role:driver'])->prefix('driver')->group(function () {
+    Route::get('/orders', [OrderController::class, 'driverOrders'])->name('driver.orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'driverOrderShow'])->name('driver.orders.show');
+    Route::post('/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('driver.orders.updateStatus');
+});
+
+// Driver Management Routes
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::post('/orders/{order}/assign-driver', [App\Http\Controllers\Admin\OrderController::class, 'assignDriver'])->name('orders.assign-driver');
+    Route::post('/orders/{order}/remove-driver', [App\Http\Controllers\Admin\OrderController::class, 'removeDriver'])->name('orders.remove-driver');
+});
+
+// أو يمكنك وضعها داخل group الـ admin مع باقي الروتس:
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders.index');
+    Route::post('/orders/{order}/assign-driver', [OrderController::class, 'assignDriver'])->name('orders.assign-driver');
+    Route::post('/orders/{order}/remove-driver', [OrderController::class, 'removeDriver'])->name('orders.remove-driver');
+    
+    // إضافة سواق جديد
+    Route::get('/admin/drivers/create', [OrderController::class, 'createDriver'])->name('admin.drivers.create');
+    Route::post('/admin/drivers', [OrderController::class, 'storeDriver'])->name('admin.drivers.store');
+});
+
+// في web.php ضيف الروت ده للاختبار:
+
+Route::get('/test-images', function () {
+    // تحقق من الـ symbolic link
+    $linkExists = is_link(public_path('storage'));
+    
+    // اجلب كل الصور في المجلد
+    $images = [];
+    if (Storage::disk('public')->exists('images')) {
+        $images = Storage::disk('public')->files('images');
+    }
+    
+    return [
+        'storage_link_exists' => $linkExists,
+        'storage_path' => storage_path('app/public'),
+        'public_storage_path' => public_path('storage'),
+        'images_found' => $images,
+        'sample_image_url' => asset('storage/images/sample.jpg'),
+        'full_path_check' => file_exists(public_path('storage/images'))
+    ];
+});
+
+Role::firstOrCreate(['name' => 'driver']);

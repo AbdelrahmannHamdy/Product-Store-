@@ -27,6 +27,7 @@
                             <th>Quantity</th>
                             <th>Total</th>
                             <th>Status</th>
+                            <th>Driver</th>
                             <th>Created</th>
                             <th>Est. Delivery</th>
                             <th>Actions</th>
@@ -54,6 +55,36 @@
                                 <span class="badge bg-{{ $purchase->order_status === 'Delivered' ? 'success' : ($purchase->order_status === 'On the way' ? 'primary' : 'warning') }}">
                                     {{ $purchase->order_status }}
                                 </span>
+                            </td>
+                            <td>
+                                <div class="driver-assignment" data-order-id="{{ $purchase->id }}">
+                                    @if($purchase->driver)
+                                        <div class="current-driver">
+                                            <span class="badge bg-info">{{ $purchase->driver->name }}</span>
+                                            <form action="{{ route('orders.remove-driver', $purchase->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-outline-danger ms-2">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @else
+                                        <form action="{{ route('orders.assign-driver', $purchase->id) }}" method="POST">
+                                            @csrf
+                                            <div class="input-group input-group-sm">
+                                                <select name="driver_id" class="form-select">
+                                                    <option value="">Select Driver</option>
+                                                    @foreach($availableDrivers as $driver)
+                                                        <option value="{{ $driver['id'] }}" {{ !$driver['is_available'] ? 'disabled' : '' }}>
+                                                            {{ $driver['name'] }} {{ !$driver['is_available'] ? '(Busy)' : '' }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                <button type="submit" class="btn btn-primary">Assign</button>
+                                            </div>
+                                        </form>
+                                    @endif
+                                </div>
                             </td>
                             <td>{{ $purchase->created_at->format('Y-m-d H:i') }}</td>
                             <td>
@@ -116,7 +147,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="9" class="text-center">No orders found.</td>
+                            <td colspan="10" class="text-center">No orders found.</td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -152,7 +183,83 @@ document.addEventListener('DOMContentLoaded', function() {
 
     statusFilter.addEventListener('change', applyFilters);
     dateFilter.addEventListener('change', applyFilters);
+
+    // Load available drivers for each order
+    loadAvailableDrivers();
 });
+
+function loadAvailableDrivers() {
+    fetch('/api/drivers/available')
+        .then(response => response.json())
+        .then(data => {
+            const driverSelects = document.querySelectorAll('.driver-select');
+            driverSelects.forEach(select => {
+                data.forEach(driver => {
+                    const option = document.createElement('option');
+                    option.value = driver.id;
+                    option.textContent = driver.name;
+                    option.className = driver.is_available ? 'text-success' : 'text-muted';
+                    option.disabled = !driver.is_available;
+                    select.appendChild(option);
+                });
+            });
+        })
+        .catch(error => console.error('Error loading drivers:', error));
+}
+
+function assignDriver(orderId, driverId) {
+    if (!driverId) return;
+
+    fetch(`/api/orders/${orderId}/assign-driver`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ driver_id: driverId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const driverAssignment = document.querySelector(`.driver-assignment[data-order-id="${orderId}"]`);
+            driverAssignment.innerHTML = `
+                <div class="current-driver">
+                    <span class="badge bg-info">${data.driver.name}</span>
+                    <button class="btn btn-sm btn-outline-danger ms-2" onclick="removeDriver(${orderId})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            // Reload available drivers for other orders
+            loadAvailableDrivers();
+        }
+    })
+    .catch(error => console.error('Error assigning driver:', error));
+}
+
+function removeDriver(orderId) {
+    fetch(`/api/orders/${orderId}/remove-driver`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const driverAssignment = document.querySelector(`.driver-assignment[data-order-id="${orderId}"]`);
+            driverAssignment.innerHTML = `
+                <select class="form-select form-select-sm driver-select" onchange="assignDriver(${orderId}, this.value)">
+                    <option value="">Select Driver</option>
+                </select>
+            `;
+            // Reload available drivers
+            loadAvailableDrivers();
+        }
+    })
+    .catch(error => console.error('Error removing driver:', error));
+}
 </script>
 @endpush
 @endsection 

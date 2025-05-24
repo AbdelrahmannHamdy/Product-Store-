@@ -20,6 +20,13 @@ class RouteServiceProvider extends ServiceProvider
     public const HOME = '/';
 
     /**
+     * Where to redirect users after authentication.
+     *
+     * @var string
+     */
+    protected $redirectTo = RouteServiceProvider::HOME;
+
+    /**
      * Define your route model bindings, pattern filters, and other route configuration.
      */
     public function boot(): void
@@ -37,4 +44,4 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
         });
     }
-} 
+}
