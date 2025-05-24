@@ -10,35 +10,25 @@ class RoleSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create roles if they don't exist
-        $roles = ['admin', 'employee', 'customer'];
-        foreach ($roles as $role) {
-            Role::firstOrCreate(['name' => $role]);
-        }
-
-        // Create permissions if they don't exist
-        $permissions = [
-            'manage-employees',
-            'manage-products',
-            'manage-customer-credits'
-        ];
-        foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
-        }
-
-        // Assign permissions to admin role
-        $adminRole = Role::findByName('admin');
-        $adminRole->syncPermissions([
-            'manage-employees',
-            'manage-products',
-            'manage-customer-credits'
+        // Create permissions
+        $createUsers = Permission::firstOrCreate(['name' => 'create_users']);
+        $manageUsers = Permission::firstOrCreate(['name' => 'manage_users']);
+        
+        // Create roles
+        $manager = Role::firstOrCreate(['name' => 'manager']);
+        $admin = Role::firstOrCreate(['name' => 'admin']);
+        $driver = Role::firstOrCreate(['name' => 'driver']);
+        $customer = Role::firstOrCreate(['name' => 'customer']);
+        
+        // Assign permissions to manager
+        $manager->syncPermissions([
+            $createUsers,
+            $manageUsers
         ]);
-
-        // Assign permissions to employee role
-        $employeeRole = Role::findByName('employee');
-        $employeeRole->syncPermissions([
-            'manage-products',
-            'manage-customer-credits'
+        
+        // Assign permissions to admin (except create_users)
+        $admin->syncPermissions([
+            $manageUsers
         ]);
     }
 } 

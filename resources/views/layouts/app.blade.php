@@ -54,6 +54,13 @@
                 <a href="{{ route('admin.hero.edit') }}">إدارة الهيرو سيكشن</a>
             @endif
 
+            @hasanyrole('admin|employee')
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('products.create') ? 'active' : '' }}" 
+                       href="{{ route('products.create') }}">Add Product</a>
+                </li>
+            @endhasanyrole
+
             @yield('content')
         </div>
     </main>

@@ -10,16 +10,34 @@
                     <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" 
                        href="{{ url('/') }}">Home</a>
                 </li>
-                <li class="nav-item">
-  <a class="nav-link" href="{{ route('cryptography') }}">Cryptography</a>
-</li>
-
+ 
 
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('products.*') ? 'active' : '' }}" 
                        href="{{ route('products.index') }}">Products</a>
                 </li>
+                
+                <li class="nav-item position-relative">
+                    <a class="nav-link" href="{{ route('cart.show') }}">
+                        <i class="fas fa-shopping-cart"></i>
+                        Cart
+                        @php $cartCount = session('cart') ? collect(session('cart'))->sum('quantity') : 0; @endphp
+                        @if($cartCount > 0)
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ $cartCount }}
+                            </span>
+                        @endif
+                    </a>
+                </li>
+
                 @auth
+                    @if(auth()->user()->hasAnyRole(['admin', 'manager']))
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('users.manage') ? 'active' : '' }}" href="{{ route('users.manage') }}">
+                            <i class="fas fa-users-cog"></i> Manage Users
+                        </a>
+                    </li>
+                    @endif
                     @role('customer')
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('purchases.*') ? 'active' : '' }}" 
@@ -31,28 +49,12 @@
                             <i class="fas fa-star"></i> Favourites
                         </a>
                     </li>
-                    <li class="nav-item position-relative">
-                        <a class="nav-link" href="{{ route('cart.show') }}">
-                            <i class="fas fa-shopping-cart"></i>
-                            Cart
-                            @php $cartCount = session('cart') ? collect(session('cart'))->sum('quantity') : 0; @endphp
-                            @if($cartCount > 0)
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    {{ $cartCount }}
-                                </span>
-                            @endif
-                        </a>
-                    </li>
                     @endrole
                     
                     @hasanyrole('admin|employee')
                     <li class="nav-item">
                         <a class="nav-link {{ request()->routeIs('products.create') ? 'active' : '' }}" 
                            href="{{ route('products.create') }}">Add Product</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{ request()->routeIs('users.manage') ? 'active' : '' }}" 
-                           href="{{ route('users.manage') }}">Manage Users</a>
                     </li>
                     @endhasanyrole
                     

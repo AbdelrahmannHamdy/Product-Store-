@@ -9,6 +9,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use DB;
 use Artisan;
+use Illuminate\Support\Facades\Hash;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -16,6 +17,11 @@ use App\Models\User;
 class UsersController extends Controller {
 
 	use ValidatesRequests;
+
+    public function __construct()
+    {
+        // Remove the auth middleware from constructor since we'll handle it in routes
+    }
 
     public function list(Request $request) {
         if(!auth()->user()->hasRole('admin')) {
@@ -222,7 +228,7 @@ class UsersController extends Controller {
     }
 
     public function manageUsers(Request $request) {
-        if(!auth()->user()->hasAnyRole(['admin', 'employee'])) {
+        if(!auth()->user()->hasAnyRole(['admin', 'manager'])) {
             abort(403, 'Unauthorized action.');
         }
         
@@ -308,5 +314,40 @@ class UsersController extends Controller {
             return redirect()->back()
                 ->with('error', $e->getMessage() ?: 'An error occurred while updating credit. Please try again.');
         }
+    }
+
+    public function create()
+    {
+        if (!auth()->user()->hasRole('manager')) {
+            abort(403, 'Only managers can create new users.');
+        }
+
+        $roles = Role::whereNotIn('name', ['manager'])->get();
+        return view('users.create', compact('roles'));
+    }
+
+    public function store(Request $request)
+    {
+        if (!auth()->user()->hasRole('manager')) {
+            abort(403, 'Only managers can create new users.');
+        }
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+            'role' => 'required|exists:roles,name'
+        ]);
+
+        $user = User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        $user->assignRole($validated['role']);
+
+        return redirect()->route('users.manage')
+            ->with('success', 'User created successfully.');
     }
 } 

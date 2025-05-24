@@ -9,6 +9,11 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+    public function __construct()
+    {
+        // Remove any auth middleware if it exists
+    }
+
     public function index(Request $request)
     {
         $query = Product::withCount('likes');

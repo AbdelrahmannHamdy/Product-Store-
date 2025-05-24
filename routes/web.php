@@ -20,6 +20,7 @@ use App\Http\Controllers\HeroSectionController;
 use App\Models\HeroSection;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Storage;
 
 Route::get('register', [UsersController::class, 'register'])->name('register');
 Route::post('register', [UsersController::class, 'doRegister'])->name('do_register');
@@ -35,6 +36,17 @@ Route::get('users/edit_password/{user?}', [UsersController::class, 'editPassword
 Route::post('users/save_password/{user}', [UsersController::class, 'savePassword'])->name('save_password');
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
+
+// Public routes for products and cart
+Route::get('/clothes', [ProductController::class, 'index'])->name('products.index');
+Route::get('/clothes/{product}', [ProductController::class, 'show'])->name('products.show');
+
+// Cart routes (public)
+Route::post('/cart/buy-now/{product}', [\App\Http\Controllers\CartController::class, 'buyNow'])->name('cart.buyNow');
+Route::post('/cart/add/{product}', [\App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
+Route::get('/cart', [\App\Http\Controllers\CartController::class, 'show'])->name('cart.show');
+Route::post('/cart/remove/{product}', [\App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/update-qty/{product}', [\App\Http\Controllers\CartController::class, 'updateQty'])->name('cart.updateQty');
 
 Route::get('/multable', function (Request $request) {
     $j = $request->number??5;
@@ -54,9 +66,9 @@ Route::get('/test', function () {
     return view('test');
 });
 
+// Protected routes
 Route::middleware(['auth'])->group(function () {
     // Product routes - غيرناها لـ clothes
-    Route::get('/clothes', [ProductController::class, 'index'])->middleware(['auth', 'verified'])->name('products.index');
     Route::get('/clothes/dashboard', [ProductController::class, 'index'])->middleware('auth')->name('products.dashboard');
 
     // Employee routes for product management
@@ -71,9 +83,6 @@ Route::middleware(['auth'])->group(function () {
             ->middleware('can:hold_products');
     });
 
-    // This needs to be after the create route
-    Route::get('/clothes/{product}', [ProductController::class, 'show'])->name('products.show');
-
     // Purchase routes
     Route::get('/purchases', [PurchaseController::class, 'index'])->name('purchases.index');
     Route::post('/clothes/{product}/purchase', [PurchaseController::class, 'store'])->name('purchases.store');
@@ -85,8 +94,19 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // User Management Routes
-    Route::get('/users/manage', [UsersController::class, 'manageUsers'])->name('users.manage');
-    Route::post('/users/{user}/manage-credit', [UserCreditController::class, 'manageCredit'])->name('users.manage-credit');
+    Route::get('/users/manage', [UsersController::class, 'manageUsers'])
+        ->middleware(['role:admin|manager'])
+        ->name('users.manage');
+    
+    Route::post('/users/{user}/manage-credit', [UserCreditController::class, 'manageCredit'])
+        ->middleware(['role:admin|manager'])
+        ->name('users.manage-credit');
+    
+    // User creation routes (manager only)
+    Route::middleware(['role:manager'])->group(function () {
+        Route::get('/users/create', [UsersController::class, 'create'])->name('users.create');
+        Route::post('/users', [UsersController::class, 'store'])->name('users.store');
+    });
 
     // Product like routes
     Route::post('/clothes/{product}/like', [ProductLikeController::class, 'toggleLike'])
@@ -127,12 +147,6 @@ Route::middleware(['auth'])->group(function () {
     })->middleware(['throttle:6,1'])->name('verification.send');
 });
 
-Route::post('/cart/buy-now/{product}', [\App\Http\Controllers\CartController::class, 'buyNow'])->name('cart.buyNow');
-Route::post('/cart/add/{product}', [\App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
-Route::get('/cart', [\App\Http\Controllers\CartController::class, 'show'])->name('cart.show');
-Route::post('/cart/remove/{product}', [\App\Http\Controllers\CartController::class, 'remove'])->name('cart.remove');
-Route::post('/cart/update-qty/{product}', [\App\Http\Controllers\CartController::class, 'updateQty'])->name('cart.updateQty');
-
 Route::get('/purchases/{purchase}/tracking', [\App\Http\Controllers\PurchaseController::class, 'tracking'])->name('purchases.tracking');
 Route::middleware(['role:admin|driver'])->group(function () {
     Route::post('/purchases/{purchase}/update-status', [\App\Http\Controllers\PurchaseController::class, 'updateStatus'])->name('purchases.updateStatus');
@@ -156,89 +170,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/admin/hero-section', [HeroSectionController::class, 'update'])->name('admin.hero.update');
 });
 
-Route::get('/cryptography', function (Request $request) {
-    $data = $request->data ?? "Welcome to Cryptography";
-    $action = $request->action ?? "Encrypt";
-    $result = "";
-    $status = "Failed";
-
-    if ($action == "Encrypt") {
-        $encrypted = openssl_encrypt($data, 'aes-128-ecb', 'thisisasecretkey', OPENSSL_RAW_DATA);
-        if ($encrypted !== false) {
-            $result = base64_encode($encrypted);
-            $status = "Encrypted Successfully";
-        }
-    } 
-    else if ($action == "Decrypt") {
-        $decoded = base64_decode($data);
-        $decrypted = openssl_decrypt($decoded, 'aes-128-ecb', 'thisisasecretkey', OPENSSL_RAW_DATA);
-        if ($decrypted !== false) {
-            $result = $decrypted;
-            $status = "Decrypted Successfully";
-        }
-    } 
-    else if ($action == "Hash") {
-        // hash() returns a hex string, convert to binary then base64 encode
-        $hashed = hash('sha256', $data, true);
-        $result = base64_encode($hashed);
-        $status = "Hashed Successfully";
-    } 
-    else if ($action == "Sign") {
-        $path = storage_path('app/private/useremail@domain.com.pfx');
-        $password = '12345678';
-        $certificates = [];
-        $pfx = file_get_contents($path);
-        if (openssl_pkcs12_read($pfx, $certificates, $password)) {
-            $privateKey = $certificates['pkey'];
-            $signature = '';
-            if (openssl_sign($data, $signature, $privateKey, OPENSSL_ALGO_SHA256)) {
-                $result = base64_encode($signature);
-                $status = "Signed Successfully";
-            }
-        }
-    } 
-    else if ($action == "Verify") {
-        $signature = base64_decode($request->result ?? '');
-        $path = storage_path('app/public/useremail@domain.com.crt');
-        $publicKey = file_get_contents($path);
-        $pubKeyId = openssl_get_publickey($publicKey);
-        if ($pubKeyId) {
-            $verify = openssl_verify($data, $signature, $pubKeyId, OPENSSL_ALGO_SHA256);
-            if ($verify === 1) {
-                $status = "Verified Successfully";
-            } else if ($verify === 0) {
-                $status = "Verification Failed";
-            } else {
-                $status = "Error during verification";
-            }
-            openssl_free_key($pubKeyId);
-        }
-    } 
-    else if ($action == "KeySend") {
-        $path = storage_path('app/public/useremail@domain.com.crt');
-        $publicKey = file_get_contents($path);
-        if (openssl_public_encrypt($data, $encrypted, $publicKey)) {
-            $result = base64_encode($encrypted);
-            $status = "Key is Encrypted Successfully";
-        }
-    } 
-    else if ($action == "KeyRecive") {
-        $path = storage_path('app/private/useremail@domain.com.pfx');
-        $password = '12345678';
-        $certificates = [];
-        $pfx = file_get_contents($path);
-        if (openssl_pkcs12_read($pfx, $certificates, $password)) {
-            $privateKey = $certificates['pkey'];
-            $encryptedData = base64_decode($data);
-            if (openssl_private_decrypt($encryptedData, $decrypted, $privateKey)) {
-                $result = $decrypted;
-                $status = "Key is Decrypted Successfully";
-            }
-        }
-    }
-
-    return view('cryptography', compact('data', 'result', 'action', 'status'));
-})->name('cryptography');
 
 Route::middleware(['auth', 'role:driver'])->prefix('driver')->group(function () {
     Route::get('/orders', [OrderController::class, 'driverOrders'])->name('driver.orders.index');

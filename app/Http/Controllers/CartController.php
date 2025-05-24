@@ -10,10 +10,6 @@ class CartController extends Controller
 {
     public function buyNow(Request $request, Product $product)
     {
-        // Only for authenticated users
-        if (!Auth::check()) {
-            return redirect()->route('login');
-        }
         // Store product in session cart (single product for Buy Now)
         $cart = [
             [
@@ -25,6 +21,13 @@ class CartController extends Controller
             ]
         ];
         session(['cart' => $cart]);
+        
+        // If user is not logged in, redirect to login
+        if (!Auth::check()) {
+            session(['url.intended' => route('checkout.show')]);
+            return redirect()->route('login');
+        }
+        
         return redirect()->route('checkout.show');
     }
 

@@ -12,8 +12,13 @@ class CheckoutController extends Controller
 {
     public function show(Request $request)
     {
+        if (!Auth::check()) {
+            // Store the intended URL in the session
+            session(['url.intended' => route('checkout.show')]);
+            return redirect()->route('login');
+        }
+
         // Here you would fetch the cart for the logged-in user
-        // For now, pass an empty array or mock data
         $cart = session('cart', []); // Or fetch from DB
         $user = Auth::user();
         return view('checkout.show', compact('cart', 'user'));

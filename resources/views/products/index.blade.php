@@ -68,35 +68,35 @@
                         @if($product->stock_quantity <= 0)
                             <button class="btn btn-outline-secondary w-100" disabled>Out of Stock</button>
                         @else
-                            @if(auth()->user()->hasRole('customer'))
-                                <form action="{{ route('cart.add', $product) }}" method="POST" style="display:inline;">
+                            <form action="{{ route('cart.add', $product) }}" method="POST" style="display:inline;">
+                                @csrf
+                                <button type="submit" class="btn btn-primary">Add to Cart</button>
+                            </form>
+                            @if(auth()->check() && auth()->user()->hasRole('customer'))
+                                <form action="{{ route('products.favourite', $product) }}" method="POST" style="display:inline;">
                                     @csrf
-                                    <button type="submit" class="btn btn-primary">Add to Cart</button>
-                                </form>
-                                @if(auth()->check())
-                                    <form action="{{ route('products.favourite', $product) }}" method="POST" style="display:inline;">
-                                        @csrf
-                                        <button type="submit" class="btn btn-warning">
-                                            {{ $product->favourite ? 'Remove from Favourite' : 'Add to Favourite' }}
-                                        </button>
-                                    </form>
-                                @endif
-                                <form action="{{ route('cart.buyNow', $product) }}" method="POST" class="mt-2">
-                                    @csrf
-                                    <button type="submit" class="btn btn-primary w-100">Buy Now</button>
+                                    <button type="submit" class="btn btn-warning">
+                                        {{ $product->favourite ? 'Remove from Favourite' : 'Add to Favourite' }}
+                                    </button>
                                 </form>
                             @endif
-                        @endif
-                        <button class="btn btn-outline-info w-100 mt-2" type="button" data-bs-toggle="collapse" data-bs-target="#reviewForm{{$product->id}}" aria-expanded="false" aria-controls="reviewForm{{$product->id}}">
-                            Add Review
-                        </button>
-                        <div class="collapse mt-2" id="reviewForm{{$product->id}}">
-                            <form action="{{ route('products.review', $product) }}" method="POST">
+                            <form action="{{ route('cart.buyNow', $product) }}" method="POST" class="mt-2">
                                 @csrf
-                                <textarea name="review" class="form-control mb-2" rows="2" placeholder="Write your review here..."></textarea>
-                                <button type="submit" class="btn btn-info btn-sm">Submit Review</button>
+                                <button type="submit" class="btn btn-primary w-100">Buy Now</button>
                             </form>
-                        </div>
+                        @endif
+                        @if(auth()->check())
+                            <button class="btn btn-outline-info w-100 mt-2" type="button" data-bs-toggle="collapse" data-bs-target="#reviewForm{{$product->id}}" aria-expanded="false" aria-controls="reviewForm{{$product->id}}">
+                                Add Review
+                            </button>
+                            <div class="collapse mt-2" id="reviewForm{{$product->id}}">
+                                <form action="{{ route('products.review', $product) }}" method="POST">
+                                    @csrf
+                                    <textarea name="review" class="form-control mb-2" rows="2" placeholder="Write your review here..."></textarea>
+                                    <button type="submit" class="btn btn-info btn-sm">Submit Review</button>
+                                </form>
+                            </div>
+                        @endif
                         @can('manage-products')
                         <div class="d-flex gap-2 mt-2">
                             <a href="{{ route('products.edit', $product) }}" class="btn btn-outline-warning btn-sm flex-fill">Edit</a>

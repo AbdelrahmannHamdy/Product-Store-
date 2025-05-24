@@ -46,25 +46,26 @@
             </table>
         </div>
         <div class="col-lg-4">
-            <div class="card shadow-sm">
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="fw-bold mb-3">Order Summary</h5>
-                    <ul class="list-unstyled mb-2">
-                        <li class="d-flex justify-content-between mb-1">
-                            <span>Subtotal</span>
-                            <span>E£{{ number_format($subtotal, 2) }}</span>
-                        </li>
-                        <li class="d-flex justify-content-between mb-1">
-                            <span>Shipping</span>
-                            <span>E£{{ number_format($shipping, 2) }}</span>
-                        </li>
-                    </ul>
-                    <hr>
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <span class="fw-bold">Total</span>
-                        <span class="fs-5 fw-bold">EGP <span style="letter-spacing:1px;">£{{ number_format($total, 2) }}</span></span>
+                    <h5 class="card-title">Order Summary</h5>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <span>E£{{ number_format($subtotal, 2) }}</span>
                     </div>
-                    <a href="{{ route('checkout.show') }}" class="btn btn-primary w-100">Checkout</a>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Shipping:</span>
+                        <span>E£{{ number_format($shipping, 2) }}</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <strong>Total:</strong>
+                        <strong>E£{{ number_format($total, 2) }}</strong>
+                    </div>
+                    <form action="{{ route('checkout.show') }}" method="GET">
+                        @csrf
+                        <button type="submit" class="btn btn-primary w-100">Proceed to Checkout</button>
+                    </form>
                 </div>
             </div>
         </div>
